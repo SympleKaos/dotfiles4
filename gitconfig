@@ -1,0 +1,11 @@
+[alias]
+    l = log --pretty=colored
+[pretty]
+    colored = format:%Cred%h%Creset %s %Cgreen(%cr) %C(bold blue)%an%Creset
+[color]
+    ui = true
+[user]
+    email = cjavilla@gmail.com
+    name = CJ Avilla
+[credential]
+	helper = osxkeychain
