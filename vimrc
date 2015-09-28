@@ -18,6 +18,8 @@ set showcmd       " display incomplete commands
 set shiftround    " When at 3 spaces and I hit >>, go to 4, not 5.
 set t_Co=256      " Use more colors
 
+colorscheme CandyPaper
+
 if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
   syntax on
 endif
@@ -33,12 +35,16 @@ set tabstop=2
 set shiftwidth=2
 set shiftround
 set expandtab
+
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
-autocmd FileType javascript set sw=4
-autocmd FileType javascript set ts=4
-autocmd FileType javascript set sts=4
+" autocmd FileType javascript set sw=4
+" autocmd FileType javascript set ts=4
+" autocmd FileType javascript set sts=4
+autocmd FileType javascript set sw=2
+autocmd FileType javascript set ts=2
+autocmd FileType javascript set sts=2
 
 " Display extra whitespace
 set list listchars=tab:»·,trail:·,nbsp:·
@@ -61,6 +67,7 @@ endif
 " Make it obvious where 80 characters is
 set textwidth=80
 set colorcolumn=+1
+hi ColorColumn ctermbg=DarkGrey guibg=SlateGray
 
 " Numbers
 set number
@@ -68,7 +75,7 @@ set relativenumber
 set numberwidth=5
 
 " Make it obvious which paren i'm on
-hi MatchParen cterm=none ctermbg=black ctermfg=yellow
+hi MatchParen cterm=none ctermbg=yellow ctermfg=yellow
 
 " Tab completion
 " will insert tab at beginning of line,
@@ -91,9 +98,8 @@ nnoremap <leader><leader> <c-^>
 " Get off my lawn
 nnoremap <Left> :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
-
+nnoremap <Up> <C-u>z.
+nnoremap <Down> <C-d>z.
 
 " vim-rspec mappings
 nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
@@ -116,13 +122,13 @@ nnoremap <C-l> <C-w>l
 " configure syntastic syntax checking to check on open as well as save
 let g:syntastic_check_on_open=1
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
-let g:syntastic_javascript_checkers = ['jsxhint']
+let g:syntastic_javascript_checkers = ['jshint']
 
 " stuff for python
 let g:syntastic_enable_signs=0
 let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_pylint_post_args = '--msg-template="{path}:{line}:{column}:{C}: {msg_id}[{symbol}] {msg}"'
-let g:syntastic_python_pylint_args = '--rcfile=/Users/w1zeman1p/repos/VacationRentals/.pylintrc'
+let g:syntastic_python_pylint_args = '--rcfile=/Users/cjavilla/repos/vacationrentals/.pylintrc'
 let $PYTHONPATH='./src:./lib'
 
 " Removes trailing spaces
