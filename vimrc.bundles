@@ -23,6 +23,14 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'rking/ag.vim'
 Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'tpope/vim-surround'
+Plugin '907th/vim-auto-save'
+Plugin 'tpope/vim-rails'
+Plugin 'thoughtbot/vim-rspec'
+Plugin 'maksimr/vim-jsbeautify'
+Plugin 'einars/js-beautify'
+Plugin 'burnettk/vim-angular'
+Plugin 'leafgarland/typescript-vim'
+
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required

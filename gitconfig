@@ -9,3 +9,5 @@
     name = CJ Avilla
 [credential]
 	helper = osxkeychain
+[core]
+	editor = /usr/local/bin/vim

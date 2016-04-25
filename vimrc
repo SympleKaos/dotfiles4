@@ -4,7 +4,7 @@ let mapleader = " "
 set autowrite     " Automatically :write before running commands
 set backspace=2   " Backspace deletes like most programs in insert mode
 set et            " Expand tabs to spaces
-set ff=unix
+set ff=unix       " Something about unix
 set history=50
 set incsearch     " do incremental searching
 set laststatus=2  " Always display the status line
@@ -17,6 +17,7 @@ set shell=/bin/bash
 set showcmd       " display incomplete commands
 set shiftround    " When at 3 spaces and I hit >>, go to 4, not 5.
 set t_Co=256      " Use more colors
+set ignorecase
 
 colorscheme CandyPaper
 
@@ -39,12 +40,18 @@ set expandtab
 autocmd FileType python set sw=4
 autocmd FileType python set ts=4
 autocmd FileType python set sts=4
-" autocmd FileType javascript set sw=4
-" autocmd FileType javascript set ts=4
-" autocmd FileType javascript set sts=4
-autocmd FileType javascript set sw=2
-autocmd FileType javascript set ts=2
-autocmd FileType javascript set sts=2
+autocmd Filetype html setlocal ts=2 sts=2 sw=2
+autocmd Filetype ruby setlocal ts=2 sts=2 sw=2
+" autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
+autocmd Filetype javascript setlocal ts=4 sts=4 sw=4
+
+map <c-f> :call JsBeautify()<cr>
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
 " Display extra whitespace
 set list listchars=tab:»·,trail:·,nbsp:·
@@ -59,7 +66,7 @@ if executable('ag')
 
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
-
+  let g:ctrlp_match_window = 'min:4,max:72'
 
   let g:ag_working_path_mode="r"
 endif
@@ -75,7 +82,7 @@ set relativenumber
 set numberwidth=5
 
 " Make it obvious which paren i'm on
-hi MatchParen cterm=none ctermbg=yellow ctermfg=yellow
+hi MatchParen cterm=underline ctermbg=none ctermfg=none
 
 " Tab completion
 " will insert tab at beginning of line,
@@ -109,6 +116,10 @@ nnoremap <Leader>l :call RunLastSpec()<CR>
 " Treat <li> and <p> tags like the block tags they are
 let g:html_indent_tags = 'li\|p'
 
+" Autosave
+let g:auto_save = 1
+let g:auto_save_in_insert_mode = 0
+
 " Open new split panes to right and bottom, which feels more natural
 set splitbelow
 set splitright
@@ -123,25 +134,30 @@ nnoremap <C-l> <C-w>l
 let g:syntastic_check_on_open=1
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_xml_checkers = ['xmllint']
 
 " stuff for python
 let g:syntastic_enable_signs=0
-let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_python_checkers = []
 let g:syntastic_python_pylint_post_args = '--msg-template="{path}:{line}:{column}:{C}: {msg_id}[{symbol}] {msg}"'
 let g:syntastic_python_pylint_args = '--rcfile=/Users/cjavilla/repos/vacationrentals/.pylintrc'
 let $PYTHONPATH='./src:./lib'
 
-" Removes trailing spaces
-function TrimWhiteSpace()
-  %s/\s*$//
-  ''
+function! <SID>StripTrailingWhitespaces()
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
 endfunction
 
+autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+
 set list listchars=trail:.,extends:>
-autocmd FileWritePre * :call TrimWhiteSpace()
-autocmd FileAppendPre * :call TrimWhiteSpace()
-autocmd FilterWritePre * :call TrimWhiteSpace()
-autocmd BufWritePre * :call TrimWhiteSpace()
 
 " Set spellfile to location that is guaranteed to exist, can be symlinked to
 " Dropbox or kept in Git and managed outside of thoughtbot/dotfiles using rcm.
